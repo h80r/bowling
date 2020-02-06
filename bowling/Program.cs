@@ -9,11 +9,12 @@ namespace bowling
 			int opcaoPinos;
 			int[] pinosDerrubados;
 
-			Console.WriteLine("Que configuração você deseja testar?");
+			Console.WriteLine("Que configuração você deseja testar?\n");
 			Console.WriteLine("1 - Jogo Completo com Spare e Strike");
 			Console.WriteLine("2 - Jogo Simples com Strike");
 			Console.WriteLine("3 - Jogo Simples com Spare");
 			Console.WriteLine("4 - Jogo Completo Perfeito");
+			Console.WriteLine("0 - Configuração Manual\n");
 			opcaoPinos = int.Parse(Console.ReadLine());
 
 			switch (opcaoPinos)
@@ -30,13 +31,16 @@ namespace bowling
 				case 4:
 					pinosDerrubados = ConfiguracaoPinos.completoPerfeito;
 					break;
+				case 0:
+					pinosDerrubados = ConfiguracaoPinos.manual();
+					break;
 				default:
-					Console.WriteLine("Opção inserida inválida.\nO teste será efetuado com a opção 1.");
+					Console.WriteLine("\nOpção inserida inválida.\nO teste será efetuado com a opção 1.");
 					pinosDerrubados = ConfiguracaoPinos.completoSpareStrike;
 					break;
 			}
 
-			Console.WriteLine(CalculadoraPontuacaoBoliche.pontuacaoDoJogo(pinosDerrubados));
+			Console.WriteLine("\nResultado final: {0} pontos!", CalculadoraPontuacaoBoliche.pontuacaoDoJogo(pinosDerrubados));
 		}
 	}
 }
