@@ -18,26 +18,37 @@ namespace bowling
 		public static int[] completoPerfeito = { 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
 		//Retorno esperado = 300
 
+		static void receberPinos (ref int[] arrayMaximo, int jogadaAtual, int pinosDerrubados = 0)
+		{
+			do
+			{
+				arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine());
+			}
+			while (arrayMaximo[jogadaAtual] > (10 - pinosDerrubados) || arrayMaximo[pinosDerrubados] < 0);
+		}
+
 		public static int[] manual()
 		{
 			int[] arrayMaximo = new int[21];
 			int[] jogoFinal;
 			int jogadaAtual = 0;
-			int valorInserido;
 
 			for (int rodadaAtual = 0; rodadaAtual < 10; rodadaAtual++, jogadaAtual++)
 			{
-				valorInserido = int.Parse(Console.ReadLine());
-				arrayMaximo[jogadaAtual] = valorInserido;
+				receberPinos(ref arrayMaximo, jogadaAtual);
 
-				if (valorInserido == 10) //strike
+				if (arrayMaximo[jogadaAtual] == 10) //strike
 				{
 					if (rodadaAtual == 9) //strike na última rodada
 					{
-						for (int i = 0; i < 2; i++)
+						jogadaAtual++;
+						arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine()); //primeira jogada adicional
+
+						jogadaAtual++;
+						if (arrayMaximo[jogadaAtual - 1] == 10) arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine()); //segunda jogada adicional, caso ocorra outro strike
+						else
 						{
-							jogadaAtual++;
-							arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine());
+							arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine()); //segunda jogada adicional, sem strike
 						}
 					}
 
@@ -45,13 +56,12 @@ namespace bowling
 				}
 
 				jogadaAtual++;
-				valorInserido = int.Parse(Console.ReadLine());
-				arrayMaximo[jogadaAtual] = valorInserido;
+				receberPinos(ref arrayMaximo, jogadaAtual, arrayMaximo[jogadaAtual - 1]);
 
-				if ((arrayMaximo[jogadaAtual - 1] + valorInserido) == 10 && rodadaAtual == 9) //spare na última rodada
+				if ((arrayMaximo[jogadaAtual - 1] + arrayMaximo[jogadaAtual]) == 10 && rodadaAtual == 9) //spare na última rodada
 				{
 					jogadaAtual++;
-					arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine());
+					receberPinos(ref arrayMaximo, jogadaAtual);
 				}
 			}
 
