@@ -22,7 +22,21 @@ namespace bowling
 		{
 			do
 			{
-				arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine());
+				Console.WriteLine("Lembrete: Somente são válidos números entre 0 e {0}.", 10 - pinosDerrubados);
+				try
+				{
+					arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine());
+				}
+				catch (FormatException)
+				{
+					Console.WriteLine("Insira apenas números!");
+					arrayMaximo[jogadaAtual] = 88; //forçar a repetição do loop
+				}
+				catch (OverflowException)
+				{
+					Console.WriteLine("O número inserido era grande demais.");
+					arrayMaximo[jogadaAtual] = 88; //forçar a repetição do loop
+				}
 			}
 			while (arrayMaximo[jogadaAtual] > (10 - pinosDerrubados) || arrayMaximo[pinosDerrubados] < 0);
 		}
@@ -35,14 +49,22 @@ namespace bowling
 
 			for (int rodadaAtual = 0; rodadaAtual < 10; rodadaAtual++, jogadaAtual++)
 			{
+				Console.Clear();
+
+				Console.WriteLine("Rodada {0}\nQuantos pinos foram derrubados na primeira jogada?", rodadaAtual + 1);
+
 				receberPinos(ref arrayMaximo, jogadaAtual); //1ª jogada da rodada
 
 				if (arrayMaximo[jogadaAtual] == 10) //strike
 				{
 					if (rodadaAtual == 9) //strike na última rodada
 					{
+						Console.WriteLine("\nQuantos pinos cairam na segunda jogada dessa rodada?");
+
 						jogadaAtual++;
 						receberPinos(ref arrayMaximo, jogadaAtual); //1ª jogada extra
+
+						Console.WriteLine("\nE quantos foram derrubados na terceira?");
 
 						jogadaAtual++;
 						if (arrayMaximo[jogadaAtual - 1] == 10)
@@ -58,13 +80,20 @@ namespace bowling
 					continue; //acabar rodada
 				}
 
+				Console.WriteLine("\nQuantos pinos cairam na segunda jogada dessa rodada?");
+
 				jogadaAtual++;
 				receberPinos(ref arrayMaximo, jogadaAtual, arrayMaximo[jogadaAtual - 1]); //2ª jogada da rodada
 
-				if ((arrayMaximo[jogadaAtual - 1] + arrayMaximo[jogadaAtual]) == 10 && rodadaAtual == 9) //spare na última rodada
+				if ((arrayMaximo[jogadaAtual - 1] + arrayMaximo[jogadaAtual]) == 10) //spare
 				{
-					jogadaAtual++;
-					receberPinos(ref arrayMaximo, jogadaAtual);
+					if (rodadaAtual == 9) //spare na última rodada
+					{
+						Console.WriteLine("\nE quantos foram derrubados na terceira?");
+
+						jogadaAtual++;
+						receberPinos(ref arrayMaximo, jogadaAtual);
+					}
 				}
 			}
 
