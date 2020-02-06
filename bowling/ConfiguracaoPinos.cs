@@ -35,20 +35,23 @@ namespace bowling
 
 			for (int rodadaAtual = 0; rodadaAtual < 10; rodadaAtual++, jogadaAtual++)
 			{
-				receberPinos(ref arrayMaximo, jogadaAtual);
+				receberPinos(ref arrayMaximo, jogadaAtual); //1ª jogada da rodada
 
 				if (arrayMaximo[jogadaAtual] == 10) //strike
 				{
 					if (rodadaAtual == 9) //strike na última rodada
 					{
 						jogadaAtual++;
-						arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine()); //primeira jogada adicional
+						receberPinos(ref arrayMaximo, jogadaAtual); //1ª jogada extra
 
 						jogadaAtual++;
-						if (arrayMaximo[jogadaAtual - 1] == 10) arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine()); //segunda jogada adicional, caso ocorra outro strike
+						if (arrayMaximo[jogadaAtual - 1] == 10)
+						{
+							receberPinos(ref arrayMaximo, jogadaAtual); //2ª jogada extra, caso ocorra outro strike
+						}
 						else
 						{
-							arrayMaximo[jogadaAtual] = int.Parse(Console.ReadLine()); //segunda jogada adicional, sem strike
+							receberPinos(ref arrayMaximo, jogadaAtual, arrayMaximo[jogadaAtual - 1]); //2ª jogada extra, sem strike
 						}
 					}
 
@@ -56,7 +59,7 @@ namespace bowling
 				}
 
 				jogadaAtual++;
-				receberPinos(ref arrayMaximo, jogadaAtual, arrayMaximo[jogadaAtual - 1]);
+				receberPinos(ref arrayMaximo, jogadaAtual, arrayMaximo[jogadaAtual - 1]); //2ª jogada da rodada
 
 				if ((arrayMaximo[jogadaAtual - 1] + arrayMaximo[jogadaAtual]) == 10 && rodadaAtual == 9) //spare na última rodada
 				{
